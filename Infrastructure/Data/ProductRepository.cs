@@ -18,7 +18,7 @@ public class ProductRepository(StoreContext _context) : IProductRepository
         _context.Products.Remove(product);
     }
 
-    public async Task<IReadOnlyList<Product>> GetPorductsAsync(string? brand, string? type)
+    public async Task<IReadOnlyList<Product>> GetPorductsAsync(string? brand, string? type, string? sort)
     {
         var query = _context.Products.AsQueryable();
 
@@ -28,6 +28,14 @@ public class ProductRepository(StoreContext _context) : IProductRepository
         if (!string.IsNullOrWhiteSpace(type))
             query = query.Where(b => b.Type == type);
 
+        query = sort switch
+        {
+            "priceAsc" => query.OrderBy(p => p.Price),
+            "priceDesc" => query.OrderByDescending(p => p.Price),
+            _ => query.OrderBy(p => p.Name)
+        };
+      
+          
         return await query.ToListAsync();
     }
 
