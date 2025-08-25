@@ -18,9 +18,17 @@ public class ProductRepository(StoreContext _context) : IProductRepository
         _context.Products.Remove(product);
     }
 
-    public async Task<IReadOnlyList<Product>> GetPorductsAsync()
+    public async Task<IReadOnlyList<Product>> GetPorductsAsync(string? brand, string? type)
     {
-        return await _context.Products.ToListAsync();
+        var query = _context.Products.AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(brand))
+            query = query.Where(b => b.Brand == brand);
+
+        if (!string.IsNullOrWhiteSpace(type))
+            query = query.Where(b => b.Type == type);
+
+        return await query.ToListAsync();
     }
 
         public async Task<IReadOnlyList<string>> GetBrandsAsync()
