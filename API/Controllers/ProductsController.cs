@@ -34,7 +34,7 @@ namespace API.Controllers
 
             if (await _repository.SaveChangesAsync())
             {
-                return CreatedAtAction("GetProductById", new{id = product.Id}, product);
+                return CreatedAtAction("GetProductById", new { id = product.Id }, product);
             }
 
             return BadRequest("Problem creating product!");
@@ -64,13 +64,25 @@ namespace API.Controllers
             if (product == null) return NotFound();
 
             _repository.DeleteProduct(product);
-            
+
             if (await _repository.SaveChangesAsync())
             {
                 return NoContent();
             }
 
             return BadRequest("Problem in delete product!");
+        }
+
+        [HttpGet("brands")]
+        public async Task<ActionResult<IReadOnlyList<string>>> GetBrands()
+        {
+            return Ok(await _repository.GetBrandsAsync());
+        }
+
+        [HttpGet("types")]
+        public async Task<ActionResult<IReadOnlyList<string>>> GetTypes()
+        {
+            return Ok(await _repository.GetTypesAsync());
         }
     }
 }
