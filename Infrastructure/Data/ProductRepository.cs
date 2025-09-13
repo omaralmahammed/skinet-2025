@@ -39,12 +39,12 @@ public class ProductRepository(StoreContext _context) : IProductRepository
         return await query.ToListAsync();
     }
 
-        public async Task<IReadOnlyList<string>> GetBrandsAsync()
+    public async Task<IReadOnlyList<string>> GetBrandsAsync()
     {
         return await _context.Products.Select(p => p.Brand).Distinct().ToListAsync();
     }
 
-        public async Task<IReadOnlyList<string>> GetTypesAsync()
+    public async Task<IReadOnlyList<string>> GetTypesAsync()
     {
         return await _context.Products.Select(p => p.Type).Distinct().ToListAsync();
     }
